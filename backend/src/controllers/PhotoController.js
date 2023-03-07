@@ -65,10 +65,45 @@ const getAllPhotos = async(req, res) => {
   const photos = await Photo.find({}).sort([["createdAt", -1]]).exec()
 
   res.status(200).json(photos);
+};
+
+const getUserPhotos = async (req, res) => {
+  const {id} = req.params;
+  try {
+    const photos = await Photo.find({userId: id}).sort([['createdAt', -1]]).exec();
+    res.status(200).json(photos) 
+  } catch (error) {
+    res.status(404).json({
+      errors: ["Fotos não encontradas."]
+    })
+    return;
+  }
+};
+
+const getPhotoById = async (req, res) => {
+  const {id} = req.params;
+  try {
+    const objectId =  new Types.ObjectId(id);
+    const photo = await Photo.findById(objectId);
+    if(!photo){
+      res.status(404).json({
+        errors: ["Foto não encontrada."]
+      })
+      return;
+    }
+    res.status(200).json(photo);
+  } catch (error) {
+    res.status(404).json({
+      errors: ["Foto não encontrada."]
+    })
+    return;
+  }
 }
 
 module.exports = {
   insertPhoto,
   deletePhoto,
-  getAllPhotos
+  getAllPhotos,
+  getUserPhotos,
+  getPhotoById
 }
