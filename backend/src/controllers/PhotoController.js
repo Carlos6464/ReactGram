@@ -147,12 +147,14 @@ const likePhoto = async (req, res) => {
       });
       return;
     };
+    //verificar se a foto ja foi curtida pelo usuario, caso não retirar o like dele da foto 
     if(photo.likes.includes(reqUser._id)){
-      res.status(422).json({
-        errors: ["Você ja curtiu a foto."]
-      })
+      photo.likes.splice(photo.likes.indexOf(reqUser._id), 1);
+      await photo.save();
+      res.status(200).json(photo.likes)
       return;
     }
+    //caso não tenha like do usúario, adicionar o like a foto
     photo.likes.push(reqUser._id);
     await photo.save();
     res.status(200).json({photoId: id, userId: reqUser._id, message: "A foto foi curtida."})
