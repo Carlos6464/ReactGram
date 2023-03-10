@@ -12,7 +12,7 @@ app.use(json());
 app.use(urlencoded({extended: false}));
 
 //cors
-app.use(cors({credentials: true, origin:"http:locoahost:3000"}));
+app.use(cors({credentials: true, origin:"http://localhost:3000"}));
 
 //uploads de imagens
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
